@@ -1,2 +1,2 @@
-# Sogoku
-Sodoku solver webapp
+# Sugoku
+Sudoku solver webapp
