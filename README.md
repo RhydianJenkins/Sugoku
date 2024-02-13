@@ -1,0 +1,2 @@
+# Sogoku
+Sodoku solver webapp
