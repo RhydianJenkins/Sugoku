@@ -1,10 +1,8 @@
-package main
+package handlers
 
 import (
 	"encoding/json"
 	"net/http"
-
-	"github.com/rhydianjenkins/sugoku/server"
 )
 
 type Response struct {
@@ -12,10 +10,7 @@ type Response struct {
 	Status  int    `json:"status"`
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	var result = server.TestFn()
-	print(result)
-
+func HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
 	response := Response{
 		Message: "Hello, World!",
 		Status:  200,
@@ -25,14 +20,5 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
-
-func main() {
-	http.HandleFunc("/", handler)
-
-	println("Server listening on port 8080...")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		panic(err)
 	}
 }
