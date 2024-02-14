@@ -7,7 +7,8 @@ import (
 )
 
 func main() {
-	fs := http.FileServer(http.Dir("/pkg/public"))
+	dir := http.Dir("/pkg/public")
+	fs := http.FileServer(dir)
 	http.Handle("/public", http.StripPrefix("/public", fs))
 
 	http.HandleFunc("/api/test", handlers.HelloWorldHandler)

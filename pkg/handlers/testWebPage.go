@@ -7,7 +7,6 @@ import (
 
 type PageData struct {
 	Title string
-	Body  string
 }
 
 func WebPageHandler(writer http.ResponseWriter, request *http.Request) {
@@ -18,8 +17,7 @@ func WebPageHandler(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	err = template.Execute(writer, PageData{
-		Title: "My Page Title",
-		Body:  "This is the body of my web page.",
+		Title: "Sugoku - A Sudoku solver in Go!",
 	})
 
 	if err != nil {
