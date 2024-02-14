@@ -11,7 +11,7 @@ type PageData struct {
 }
 
 func WebPageHandler(writer http.ResponseWriter, request *http.Request) {
-	template, err := template.ParseFiles("pkg/templates/testPage.html")
+	template, err := template.ParseFiles("pkg/public/templates/index.html")
 
 	if err != nil {
 		panic(err)
