@@ -7,9 +7,8 @@ import (
 )
 
 func main() {
-	dir := http.Dir("/pkg/public")
-	fs := http.FileServer(dir)
-	http.Handle("/public", http.StripPrefix("/public", fs))
+	fs := http.FileServer(http.Dir("pkg/public/styles"))
+	http.Handle("/public/styles/", http.StripPrefix("/public/styles/", fs))
 
 	http.HandleFunc("/api/test", handlers.HelloWorldHandler)
 	http.HandleFunc("/", handlers.WebPageHandler)
