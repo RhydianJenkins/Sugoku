@@ -8,8 +8,8 @@ import (
 	"github.com/rhydianjenkins/sugoku/pkg/handlers"
 )
 
-func getPort() *string {
-	port := flag.String("port", "8080", "Port to run the server on")
+func getPort() *int {
+	port := flag.Int("port", 8080, "Port to run the server on")
 	flag.Parse()
 
 	return port
@@ -17,17 +17,15 @@ func getPort() *string {
 
 func main() {
 	port := getPort()
-
 	fs := http.FileServer(http.Dir("pkg/public/styles"))
 	http.Handle("/public/styles/", http.StripPrefix("/public/styles/", fs))
 
 	http.HandleFunc("/api/test", handlers.HelloWorldHandler)
 	http.HandleFunc("/", handlers.WebPageHandler)
 
-	err := http.ListenAndServe(":"+*port, nil)
+	fmt.Println(fmt.Sprintf("Starting server on localhost:%d", *port))
+	err := http.ListenAndServe(fmt.Sprintf(":%d", *port), nil)
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Println("Server listening on port " + *port)
 }
