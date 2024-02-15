@@ -6,3 +6,6 @@ build: ## Build into a binary
 
 run: ## Run the server
 	go run ./main.go
+
+watch: ## Use nodemon to watch go files for changes
+	nodemon --watch './**/*.go' --signal SIGTERM --exec 'go' run ./main.go
