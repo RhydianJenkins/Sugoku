@@ -8,8 +8,8 @@ import (
 )
 
 type Response struct {
-	Message string      `json:"message"`
-	Board   board.Board `json:"board"`
+	BoardStr string                                       `json:"boardString"`
+	Tiles    [board.BoardSize][board.BoardSize]board.Tile `json:"tiles"`
 }
 
 func BoardHandler(writer http.ResponseWriter, request *http.Request) {
@@ -19,9 +19,11 @@ func BoardHandler(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	b := board.New()
+
 	response := Response{
-		Message: "Here's your board!",
-		Board:   board.New(),
+		BoardStr: b.String(),
+		Tiles:    b.GetTiles(),
 	}
 
 	writer.Header().Set("Content-Type", "application/json")
