@@ -21,7 +21,7 @@ func main() {
 	fs := http.FileServer(http.Dir("pkg/public/styles"))
 	http.Handle("/public/styles/", http.StripPrefix("/public/styles/", fs))
 
-	http.HandleFunc("/api/test", handlers.HelloWorldHandler)
+	http.HandleFunc("/api/solve", handlers.BoardHandler)
 	http.HandleFunc("/", handlers.WebPageHandler)
 
 	fmt.Println(fmt.Sprintf("Starting server on localhost:%d", *port))
