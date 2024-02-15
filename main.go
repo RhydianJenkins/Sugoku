@@ -8,15 +8,16 @@ import (
 	"github.com/rhydianjenkins/sugoku/pkg/handlers"
 )
 
-func getPort() *int {
-	port := flag.Int("port", 8080, "Port to run the server on")
+func getPort() (port *int) {
+	p := flag.Int("port", 8080, "Port to run the server on")
 	flag.Parse()
 
-	return port
+	return p
 }
 
 func main() {
 	port := getPort()
+
 	fs := http.FileServer(http.Dir("pkg/public/styles"))
 	http.Handle("/public/styles/", http.StripPrefix("/public/styles/", fs))
 
