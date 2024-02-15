@@ -11,4 +11,4 @@ watch: ## Use nodemon to watch go files for changes
 	@nodemon --watch './**/*.go' --signal SIGTERM --exec 'go' run ./main.go
 
 test: ## Run all tests
-	@go test -v ./pkg/board
+	@go test -v ./...
