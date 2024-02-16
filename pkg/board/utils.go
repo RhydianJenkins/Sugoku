@@ -4,7 +4,7 @@ func calculatePossibleValues(board Board, x, y int) []int {
 	tile := board.tiles[x][y]
 
 	if !tile.isEmpty() {
-		return []int{tile.value}
+		return []int{}
 	}
 
 	row := board.GetRow(tile.x)

@@ -12,7 +12,7 @@ func TestGetCol(t *testing.T) {
 	tiles := b.GetTiles()
 
 	for i := 0; i < BoardSize; i++ {
-		if col[i] != tiles[i][colNum] {
+		if col[i].x != tiles[i][colNum].x || col[i].y != tiles[i][colNum].y {
 			t.Errorf("Expected 0, got %v", col[i])
 		}
 	}
@@ -20,7 +20,7 @@ func TestGetCol(t *testing.T) {
 
 func TestCalculatePossibleValuesWithNonEmptyVal(t *testing.T) {
 	returned := calculatePossibleValues(New(), 0, 0)
-	expected := []int{1}
+	expected := []int{}
 
 	if !reflect.DeepEqual(expected, returned) {
 		t.Errorf("Expected %v, got %v", expected, returned)
@@ -39,6 +39,16 @@ func TestCalculatePossibleValuesWithEmptyVal(t *testing.T) {
 func TestFilterEmpty(t *testing.T) {
 	expected := []int{1, 2, 3, 5}
 	returned := filterEmpty([]int{0, 1, 2, 3, 0, 5})
+
+	if !reflect.DeepEqual(expected, returned) {
+		t.Errorf("Expected %v, got %v", expected, returned)
+	}
+}
+
+func TestFindLowestEntropyTiles(t *testing.T) {
+	board := New()
+	returned := board.findLowestEntropyTiles()
+	expected := []Tile{board.GetTile(0, 1), board.GetTile(1, 0)}
 
 	if !reflect.DeepEqual(expected, returned) {
 		t.Errorf("Expected %v, got %v", expected, returned)

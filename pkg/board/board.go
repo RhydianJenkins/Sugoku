@@ -26,6 +26,41 @@ func New() Board {
 	}
 }
 
+func (board Board) findLowestEntropyTiles() []Tile {
+	lowestEntropy := NumValues
+	lowestEntropyTiles := []Tile{}
+
+	for x := 0; x < BoardSize; x++ {
+		for y := 0; y < BoardSize; y++ {
+			tile := board.GetTile(x, y)
+			possibleValues := calculatePossibleValues(board, x, y)
+			entropy := len(possibleValues)
+
+			if entropy < lowestEntropy && entropy > 0 {
+				lowestEntropy = entropy
+			}
+
+			tile.entropy = entropy
+			tile.possibleValues = possibleValues
+
+			fmt.Println("board.GetTile(0,1) in first loop:", board.GetTile(0, 1).entropy)
+			fmt.Println("tile.enropy in first loop:", tile.entropy)
+		}
+	}
+
+	for x := 0; x < BoardSize; x++ {
+		for y := 0; y < BoardSize; y++ {
+			tile := board.GetTile(x, y)
+
+			if tile.entropy == lowestEntropy {
+				lowestEntropyTiles = append(lowestEntropyTiles, tile)
+			}
+		}
+	}
+
+	return lowestEntropyTiles
+}
+
 func (board Board) String() string {
 	return fmt.Sprintf("%v", board.tiles)
 }

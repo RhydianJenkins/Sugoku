@@ -3,18 +3,23 @@ package board
 import "fmt"
 
 const Empty int = 0
+const InitialEntropy int = -1
 
 type Tile struct {
-	x     int
-	y     int
-	value int
+	x              int
+	y              int
+	value          int
+	entropy        int
+	possibleValues []int
 }
 
 func NewTile(x, y int) Tile {
 	return Tile{
-		x:     x,
-		y:     y,
-		value: Empty,
+		x:              x,
+		y:              y,
+		value:          Empty,
+		entropy:        InitialEntropy,
+		possibleValues: []int{},
 	}
 }
 
