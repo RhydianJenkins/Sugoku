@@ -18,7 +18,7 @@ func NewTile(x, y int) Tile {
 	}
 }
 
-func (tile Tile) IsEmpty() bool {
+func (tile Tile) isEmpty() bool {
 	return tile.value == Empty
 }
 

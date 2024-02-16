@@ -19,8 +19,7 @@ func TestGetCol(t *testing.T) {
 }
 
 func TestCalculatePossibleValuesWithNonEmptyVal(t *testing.T) {
-	b := New()
-	returned := b.CalculatePossibleValues(0, 0)
+	returned := calculatePossibleValues(New(), 0, 0)
 	expected := []int{1}
 
 	if !reflect.DeepEqual(expected, returned) {
@@ -29,8 +28,7 @@ func TestCalculatePossibleValuesWithNonEmptyVal(t *testing.T) {
 }
 
 func TestCalculatePossibleValuesWithEmptyVal(t *testing.T) {
-	b := New()
-	returned := b.CalculatePossibleValues(0, 1)
+	returned := calculatePossibleValues(New(), 0, 1)
 	expected := []int{2, 3, 4}
 
 	if !reflect.DeepEqual(expected, returned) {
