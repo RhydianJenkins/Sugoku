@@ -29,7 +29,7 @@ func New() Board {
 func (board Board) CalculatePossibleValues(x, y int) []int {
 	tile := board.tiles[x][y]
 
-	if tile.IsEmpty() {
+	if !tile.IsEmpty() {
 		return []int{tile.value}
 	}
 
