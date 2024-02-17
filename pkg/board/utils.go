@@ -1,5 +1,19 @@
 package board
 
+func solveOneStep(board Board) {
+	panic("TODO: implement")
+
+	// 1. get slice of lowest entropy tiles
+	// 2. for each tile, get possible values
+	// 3. if only one possible value, set the value
+	// 4. if no possible value, return error
+	// 5. select random tile from lowest entropy tiles
+	// 6. select random value from possible values
+	// 7. set the value
+	// 8. ???
+	// 9. profit
+}
+
 func calculatePossibleValues(board Board, x, y int) []int {
 	tile := board.tiles[x][y]
 

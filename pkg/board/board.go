@@ -33,15 +33,12 @@ func (board *Board) findLowestEntropyTiles() []*Tile {
 	for x := 0; x < BoardSize; x++ {
 		for y := 0; y < BoardSize; y++ {
 			tile := board.GetTile(x, y)
-			possibleValues := calculatePossibleValues(*board, x, y)
-			entropy := len(possibleValues)
+			tile.possibleValues = calculatePossibleValues(*board, x, y)
+			tileEntropy := tile.GetEntropy()
 
-			if entropy < lowestEntropy && entropy > 0 {
-				lowestEntropy = entropy
+			if tileEntropy < lowestEntropy && tileEntropy > 0 {
+				lowestEntropy = tileEntropy
 			}
-
-			tile.possibleValues = possibleValues
-			tile.entropy = entropy
 		}
 	}
 
@@ -49,7 +46,7 @@ func (board *Board) findLowestEntropyTiles() []*Tile {
 		for y := 0; y < BoardSize; y++ {
 			tile := board.GetTile(x, y)
 
-			if tile.entropy == lowestEntropy {
+			if tile.GetEntropy() == lowestEntropy {
 				lowestEntropyTiles = append(lowestEntropyTiles, tile)
 			}
 		}
