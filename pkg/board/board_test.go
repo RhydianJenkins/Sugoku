@@ -48,7 +48,7 @@ func TestFilterEmpty(t *testing.T) {
 func TestFindLowestEntropyTiles(t *testing.T) {
 	board := New()
 	returned := board.findLowestEntropyTiles()
-	expected := []Tile{board.GetTile(0, 1), board.GetTile(1, 0)}
+	expected := []*Tile{board.GetTile(0, 1), board.GetTile(1, 0)}
 
 	if !reflect.DeepEqual(expected, returned) {
 		t.Errorf("Expected %v, got %v", expected, returned)

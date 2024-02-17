@@ -26,25 +26,22 @@ func New() Board {
 	}
 }
 
-func (board Board) findLowestEntropyTiles() []Tile {
+func (board *Board) findLowestEntropyTiles() []*Tile {
 	lowestEntropy := NumValues
-	lowestEntropyTiles := []Tile{}
+	lowestEntropyTiles := []*Tile{}
 
 	for x := 0; x < BoardSize; x++ {
 		for y := 0; y < BoardSize; y++ {
 			tile := board.GetTile(x, y)
-			possibleValues := calculatePossibleValues(board, x, y)
+			possibleValues := calculatePossibleValues(*board, x, y)
 			entropy := len(possibleValues)
 
 			if entropy < lowestEntropy && entropy > 0 {
 				lowestEntropy = entropy
 			}
 
-			tile.entropy = entropy
 			tile.possibleValues = possibleValues
-
-			fmt.Println("board.GetTile(0,1) in first loop:", board.GetTile(0, 1).entropy)
-			fmt.Println("tile.enropy in first loop:", tile.entropy)
+			tile.entropy = entropy
 		}
 	}
 
@@ -65,8 +62,8 @@ func (board Board) String() string {
 	return fmt.Sprintf("%v", board.tiles)
 }
 
-func (board Board) GetTile(x, y int) Tile {
-	return board.tiles[x][y]
+func (board *Board) GetTile(x, y int) *Tile {
+	return &board.tiles[x][y]
 }
 
 func (board Board) GetTiles() [BoardSize][BoardSize]Tile {
@@ -81,7 +78,7 @@ func (board Board) GetCol(y int) [BoardSize]Tile {
 	col := [BoardSize]Tile{}
 
 	for i := 0; i < BoardSize; i++ {
-		col[i] = board.GetTile(i, y)
+		col[i] = *board.GetTile(i, y)
 	}
 
 	return col
