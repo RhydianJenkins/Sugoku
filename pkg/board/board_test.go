@@ -1,6 +1,7 @@
 package board
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -53,4 +54,15 @@ func TestFindLowestEntropyTiles(t *testing.T) {
 	if !reflect.DeepEqual(expected, returned) {
 		t.Errorf("Expected %v, got %v", expected, returned)
 	}
+}
+
+// TODO
+func TestSolveOneStep(t *testing.T) {
+	board := New()
+	solveOneStep(&board)
+	solveOneStep(&board)
+	solveOneStep(&board)
+
+	// is random /really/ random?
+	fmt.Println(board)
 }

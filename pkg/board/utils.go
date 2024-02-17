@@ -1,7 +1,12 @@
 package board
 
-func solveOneStep(board Board) {
-	panic("TODO: implement")
+import (
+	"math/rand"
+	"time"
+)
+
+func solveOneStep(board *Board) {
+	// panic("TODO: implement")
 
 	// 1. get slice of lowest entropy tiles
 	// 2. for each tile, get possible values
@@ -12,6 +17,20 @@ func solveOneStep(board Board) {
 	// 7. set the value
 	// 8. ???
 	// 9. profit
+
+	lowestEntropyTiles := board.findLowestEntropyTiles()
+
+	if len(lowestEntropyTiles) == 0 {
+		panic("No solution found. TODO backgrack")
+	}
+
+	rand.Seed(time.Now().Unix())
+	randomTileIndex := rand.Intn(len(lowestEntropyTiles))
+	randomTile := lowestEntropyTiles[randomTileIndex]
+	randomValueIndex := rand.Intn(len(randomTile.possibleValues))
+	randomValue := randomTile.possibleValues[randomValueIndex]
+
+	randomTile.value = randomValue
 }
 
 func calculatePossibleValues(board Board, x, y int) []int {
