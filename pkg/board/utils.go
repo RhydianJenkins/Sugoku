@@ -80,7 +80,7 @@ func calculatePossibleValues(board Board, x, y int) []int {
 	col := board.GetCol(tile.y)
 	possibleValues := []int{}
 
-	for i := 1; i <= NumValues; i++ {
+	for i := 1; i <= BoardSize; i++ {
 		possibleValues = append(possibleValues, i)
 	}
 

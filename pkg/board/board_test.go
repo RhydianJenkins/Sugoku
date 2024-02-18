@@ -55,27 +55,17 @@ func TestFilterEmpty(t *testing.T) {
 
 func TestFindLowestEntropyTiles(t *testing.T) {
 	board := createBoard()
-	returned := board.findLowestEntropyTiles()
-	expected := []*Tile{
-		//     *NOT* (0, 0) because it's prepopulated
-		board.GetTile(0, 1),
-		board.GetTile(0, 2),
-		board.GetTile(1, 0),
-		board.GetTile(1, 1),
-		board.GetTile(1, 2),
-		board.GetTile(2, 0),
-		board.GetTile(2, 1),
-		board.GetTile(2, 2),
-	}
+	numReturned := len(board.findLowestEntropyTiles())
+	numExpected := 80
 
-	if !reflect.DeepEqual(expected, returned) {
-		t.Errorf("Expected %v, got %v", expected, returned)
+	if numReturned != numExpected {
+		t.Errorf("Expected %v, got %v", numExpected, numReturned)
 	}
 }
 
 func TestSolveOneStep(t *testing.T) {
 	board := createBoard()
-	for i := 0; i < NumValues-board.numPrePopulatedTiles; i++ {
+	for i := 0; i < BoardSize-board.numPrePopulatedTiles; i++ {
 		solveOneStep(&board)
 	}
 
@@ -97,5 +87,26 @@ func TestBoardIsValid(t *testing.T) {
 	isValid, message = boardIsValid(board)
 	if isValid {
 		t.Errorf("Expected modified board to be invalid, got valid with message %v", message)
+	}
+}
+
+func TestGetBlock(t *testing.T) {
+	board := createBoard()
+	board.GetTile(3, 4).value = 2
+	block := board.GetBlock(1, 0)
+	expected := []*Tile{
+		board.GetTile(3, 0),
+		board.GetTile(3, 1),
+		board.GetTile(3, 2),
+		board.GetTile(4, 0),
+		board.GetTile(4, 1),
+		board.GetTile(4, 2),
+		board.GetTile(5, 0),
+		board.GetTile(5, 1),
+		board.GetTile(5, 2),
+	}
+
+	if !reflect.DeepEqual(expected, block) {
+		t.Errorf("Expected %v, got %v", expected, block)
 	}
 }
