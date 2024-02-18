@@ -6,6 +6,8 @@ import (
 )
 
 func boardIsValid(board Board) (isValid bool, message string) {
+	seenValues := make(map[int]bool)
+
 	// check columns are unique
 	for x := 0; x < BoardSize; x++ {
 		col := board.GetCol(x)
@@ -18,10 +20,15 @@ func boardIsValid(board Board) (isValid bool, message string) {
 			}
 
 			if seenColValues[val] {
-				return false, fmt.Sprint("Val is not unique in col", val)
+				return false, fmt.Sprintf("Val %d is not unique in col", val)
+			}
+
+			if seenValues[val] {
+				return false, fmt.Sprintf("Val %d is not unique in board", val)
 			}
 
 			seenColValues[val] = true
+			seenValues[val] = true
 		}
 	}
 
@@ -37,7 +44,7 @@ func boardIsValid(board Board) (isValid bool, message string) {
 			}
 
 			if seenRowValues[val] {
-				return false, fmt.Sprint("Val is not unique in row", val)
+				return false, fmt.Sprintf("Val %d is not unique in row %d", val, x)
 			}
 
 			seenRowValues[val] = true
@@ -87,6 +94,17 @@ func calculatePossibleValues(board Board, x, y int) []int {
 		}
 	}
 
+	for x := 0; x < BoardSize; x++ {
+		for y := 0; y < BoardSize; y++ {
+			val := board.tiles[x][y].value
+
+			if val != Empty {
+				possibleValues[val-1] = Empty
+			}
+		}
+	}
+
+	fmt.Println(possibleValues)
 	return filterEmpty(possibleValues)
 }
 

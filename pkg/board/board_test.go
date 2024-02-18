@@ -1,6 +1,7 @@
 package board
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -70,6 +71,8 @@ func TestSolveOneStep(t *testing.T) {
 	}
 
 	isValid, message := boardIsValid(board)
+	fmt.Println(board)
+
 	if !isValid {
 		t.Errorf("Expected board to be valid, got invalid with message %v", message)
 	}
