@@ -51,7 +51,7 @@ func solveOneStep(board *Board) {
 	lowestEntropyTiles := board.findLowestEntropyTiles()
 
 	if len(lowestEntropyTiles) == 0 {
-		panic("No solution found. TODO backgrack")
+		panic("No solution found. TODO backtrack")
 	}
 
 	randomTileIndex := rand.Intn(len(lowestEntropyTiles))

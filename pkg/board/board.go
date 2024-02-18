@@ -6,10 +6,15 @@ const BoardSize int = 2
 const NumValues int = BoardSize * BoardSize
 
 type Board struct {
-	tiles [BoardSize][BoardSize]Tile
+	tiles                [BoardSize][BoardSize]Tile
+	numPrePopulatedTiles int
 }
 
-func New() Board {
+type TileVal struct {
+	x, y, val int
+}
+
+func New(tileValues []TileVal) Board {
 	tiles := [BoardSize][BoardSize]Tile{}
 
 	for i := 0; i < BoardSize; i++ {
@@ -18,11 +23,13 @@ func New() Board {
 		}
 	}
 
-	// TODO find a better way of initialising the board
-	tiles[0][0].value = 1
+	for _, tileVal := range tileValues {
+		tiles[tileVal.x][tileVal.y].value = tileVal.val
+	}
 
 	return Board{
-		tiles,
+		tiles:                tiles,
+		numPrePopulatedTiles: len(tileValues),
 	}
 }
 

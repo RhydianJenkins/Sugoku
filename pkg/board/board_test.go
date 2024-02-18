@@ -5,9 +5,17 @@ import (
 	"testing"
 )
 
+func createBoard() Board {
+	b := New([]TileVal{
+		TileVal{0, 0, 1},
+	})
+
+	return b
+}
+
 func TestGetCol(t *testing.T) {
 	colNum := BoardSize - 1
-	b := New()
+	b := createBoard()
 	col := b.GetCol(colNum)
 	tiles := b.GetTiles()
 
@@ -19,7 +27,7 @@ func TestGetCol(t *testing.T) {
 }
 
 func TestCalculatePossibleValuesWithNonEmptyVal(t *testing.T) {
-	returned := calculatePossibleValues(New(), 0, 0)
+	returned := calculatePossibleValues(createBoard(), 0, 0)
 	expected := []int{}
 
 	if !reflect.DeepEqual(expected, returned) {
@@ -28,7 +36,7 @@ func TestCalculatePossibleValuesWithNonEmptyVal(t *testing.T) {
 }
 
 func TestCalculatePossibleValuesWithEmptyVal(t *testing.T) {
-	returned := calculatePossibleValues(New(), 0, 1)
+	returned := calculatePossibleValues(createBoard(), 0, 1)
 	expected := []int{2, 3, 4}
 
 	if !reflect.DeepEqual(expected, returned) {
@@ -46,7 +54,7 @@ func TestFilterEmpty(t *testing.T) {
 }
 
 func TestFindLowestEntropyTiles(t *testing.T) {
-	board := New()
+	board := createBoard()
 	returned := board.findLowestEntropyTiles()
 	expected := []*Tile{board.GetTile(0, 1), board.GetTile(1, 0)}
 
@@ -56,9 +64,8 @@ func TestFindLowestEntropyTiles(t *testing.T) {
 }
 
 func TestSolveOneStep(t *testing.T) {
-	board := New()
-	numSolvedAtStart := 1 // TODO change when revisiting board initialisation
-	for i := 0; i < NumValues-numSolvedAtStart; i++ {
+	board := createBoard()
+	for i := 0; i < NumValues-board.numPrePopulatedTiles; i++ {
 		solveOneStep(&board)
 	}
 
@@ -69,7 +76,7 @@ func TestSolveOneStep(t *testing.T) {
 }
 
 func TestBoardIsValid(t *testing.T) {
-	board := New()
+	board := createBoard()
 	isValid, message := boardIsValid(board)
 	if !isValid {
 		t.Errorf("Expected starting board to be valid, got invalid with message %v", message)
