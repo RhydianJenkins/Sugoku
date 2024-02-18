@@ -13,9 +13,9 @@ type Board struct {
 func NewBoard(tileValues []TileVal) Board {
 	tiles := [BoardSize][BoardSize]Tile{}
 
-	for i := 0; i < BoardSize; i++ {
-		for j := 0; j < BoardSize; j++ {
-			tiles[i][j] = NewTile(i, j)
+	for x := 0; x < BoardSize; x++ {
+		for y := 0; y < BoardSize; y++ {
+			tiles[x][y] = NewTile(x, y)
 		}
 	}
 

@@ -54,9 +54,34 @@ func TestFilterEmpty(t *testing.T) {
 }
 
 func TestFindLowestEntropyTiles(t *testing.T) {
-	board := createBoard()
+	board := NewBoard([]TileVal{
+		TileVal{0, 0, 1},
+		TileVal{1, 1, 2},
+		TileVal{4, 4, 2},
+		TileVal{5, 4, 5},
+	})
 	numReturned := len(board.findLowestEntropyTiles())
-	numExpected := 80
+	numExpected := 1
+
+	if numReturned != numExpected {
+		t.Errorf("Expected %v, but got %v", numExpected, numReturned)
+	}
+
+	lowest := board.findLowestEntropyTiles()[0]
+	if lowest.x != 0 || lowest.y != 4 {
+		t.Errorf("Expected lowest tile to be (0, 4) but got (%v, %v)", lowest.x, lowest.y)
+	}
+
+	expected := []int{3, 4, 6, 7, 8, 9}
+	if !reflect.DeepEqual(expected, lowest.possibleValues) {
+		t.Errorf("Expected possible values to be %v, but got %v", expected, lowest.possibleValues)
+	}
+}
+
+func TestFindLowestEntropyTilesOnEmptyBoard(t *testing.T) {
+	board := NewBoard([]TileVal{})
+	numReturned := len(board.findLowestEntropyTiles())
+	numExpected := BoardSize * BoardSize
 
 	if numReturned != numExpected {
 		t.Errorf("Expected %v, got %v", numExpected, numReturned)
