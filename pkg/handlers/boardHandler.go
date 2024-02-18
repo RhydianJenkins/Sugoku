@@ -19,7 +19,8 @@ func BoardHandler(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	b := board.New()
+	initialTileVals := []board.TileVal{}
+	b := board.New(initialTileVals)
 
 	response := Response{
 		BoardStr: b.String(),

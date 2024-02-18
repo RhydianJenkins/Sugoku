@@ -104,7 +104,6 @@ func calculatePossibleValues(board Board, x, y int) []int {
 		}
 	}
 
-	fmt.Println(possibleValues)
 	return filterEmpty(possibleValues)
 }
 

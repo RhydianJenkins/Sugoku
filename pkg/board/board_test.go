@@ -1,7 +1,6 @@
 package board
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 )
@@ -57,7 +56,7 @@ func TestFilterEmpty(t *testing.T) {
 func TestFindLowestEntropyTiles(t *testing.T) {
 	board := createBoard()
 	returned := board.findLowestEntropyTiles()
-	expected := []*Tile{board.GetTile(0, 1), board.GetTile(1, 0)}
+	expected := []*Tile{board.GetTile(0, 1), board.GetTile(1, 0), board.GetTile(1, 1)}
 
 	if !reflect.DeepEqual(expected, returned) {
 		t.Errorf("Expected %v, got %v", expected, returned)
@@ -71,7 +70,6 @@ func TestSolveOneStep(t *testing.T) {
 	}
 
 	isValid, message := boardIsValid(board)
-	fmt.Println(board)
 
 	if !isValid {
 		t.Errorf("Expected board to be valid, got invalid with message %v", message)
