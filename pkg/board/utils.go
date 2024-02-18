@@ -1,30 +1,59 @@
 package board
 
 import (
+	"fmt"
 	"math/rand"
-	"time"
 )
 
+func boardIsValid(board Board) (isValid bool, message string) {
+	// check columns are unique
+	for x := 0; x < BoardSize; x++ {
+		col := board.GetCol(x)
+		seenColValues := make(map[int]bool)
+
+		for y := 0; y < BoardSize; y++ {
+			val := col[y].value
+			if val == Empty {
+				continue
+			}
+
+			if seenColValues[val] {
+				return false, fmt.Sprint("Val is not unique in col", val)
+			}
+
+			seenColValues[val] = true
+		}
+	}
+
+	// check rows are unique
+	for y := 0; y < BoardSize; y++ {
+		row := board.GetRow(y)
+		seenRowValues := make(map[int]bool)
+
+		for x := 0; x < BoardSize; x++ {
+			val := row[x].value
+			if val == Empty {
+				continue
+			}
+
+			if seenRowValues[val] {
+				return false, fmt.Sprint("Val is not unique in row", val)
+			}
+
+			seenRowValues[val] = true
+		}
+	}
+
+	return true, "Board is valid"
+}
+
 func solveOneStep(board *Board) {
-	// panic("TODO: implement")
-
-	// 1. get slice of lowest entropy tiles
-	// 2. for each tile, get possible values
-	// 3. if only one possible value, set the value
-	// 4. if no possible value, return error
-	// 5. select random tile from lowest entropy tiles
-	// 6. select random value from possible values
-	// 7. set the value
-	// 8. ???
-	// 9. profit
-
 	lowestEntropyTiles := board.findLowestEntropyTiles()
 
 	if len(lowestEntropyTiles) == 0 {
 		panic("No solution found. TODO backgrack")
 	}
 
-	rand.Seed(time.Now().Unix())
 	randomTileIndex := rand.Intn(len(lowestEntropyTiles))
 	randomTile := lowestEntropyTiles[randomTileIndex]
 	randomValueIndex := rand.Intn(len(randomTile.possibleValues))

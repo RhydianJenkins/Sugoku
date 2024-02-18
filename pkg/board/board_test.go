@@ -1,7 +1,6 @@
 package board
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 )
@@ -56,13 +55,29 @@ func TestFindLowestEntropyTiles(t *testing.T) {
 	}
 }
 
-// TODO
 func TestSolveOneStep(t *testing.T) {
 	board := New()
-	solveOneStep(&board)
-	solveOneStep(&board)
-	solveOneStep(&board)
+	numSolvedAtStart := 1 // TODO change when revisiting board initialisation
+	for i := 0; i < NumValues-numSolvedAtStart; i++ {
+		solveOneStep(&board)
+	}
 
-	// is random /really/ random?
-	fmt.Println(board)
+	isValid, message := boardIsValid(board)
+	if !isValid {
+		t.Errorf("Expected board to be valid, got invalid with message %v", message)
+	}
+}
+
+func TestBoardIsValid(t *testing.T) {
+	board := New()
+	isValid, message := boardIsValid(board)
+	if !isValid {
+		t.Errorf("Expected starting board to be valid, got invalid with message %v", message)
+	}
+
+	board.GetTile(0, 1).value = 1
+	isValid, message = boardIsValid(board)
+	if isValid {
+		t.Errorf("Expected modified board to be invalid, got valid with message %v", message)
+	}
 }
