@@ -94,6 +94,7 @@ func calculatePossibleValues(board Board, x, y int) []int {
 		}
 	}
 
+	// TODO only need to check the block that this tile is in
 	for x := 0; x < BoardSize; x++ {
 		for y := 0; y < BoardSize; y++ {
 			val := board.tiles[x][y].value

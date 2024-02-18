@@ -6,7 +6,7 @@ import (
 )
 
 func createBoard() Board {
-	b := New([]TileVal{
+	b := NewBoard([]TileVal{
 		TileVal{0, 0, 1},
 	})
 
@@ -37,7 +37,7 @@ func TestCalculatePossibleValuesWithNonEmptyVal(t *testing.T) {
 
 func TestCalculatePossibleValuesWithEmptyVal(t *testing.T) {
 	returned := calculatePossibleValues(createBoard(), 0, 1)
-	expected := []int{2, 3, 4}
+	expected := []int{2, 3, 4, 5, 6, 7, 8, 9}
 
 	if !reflect.DeepEqual(expected, returned) {
 		t.Errorf("Expected %v, got %v", expected, returned)
@@ -56,7 +56,17 @@ func TestFilterEmpty(t *testing.T) {
 func TestFindLowestEntropyTiles(t *testing.T) {
 	board := createBoard()
 	returned := board.findLowestEntropyTiles()
-	expected := []*Tile{board.GetTile(0, 1), board.GetTile(1, 0), board.GetTile(1, 1)}
+	expected := []*Tile{
+		//     *NOT* (0, 0) because it's prepopulated
+		board.GetTile(0, 1),
+		board.GetTile(0, 2),
+		board.GetTile(1, 0),
+		board.GetTile(1, 1),
+		board.GetTile(1, 2),
+		board.GetTile(2, 0),
+		board.GetTile(2, 1),
+		board.GetTile(2, 2),
+	}
 
 	if !reflect.DeepEqual(expected, returned) {
 		t.Errorf("Expected %v, got %v", expected, returned)

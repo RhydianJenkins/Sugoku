@@ -2,19 +2,16 @@ package board
 
 import "fmt"
 
-const BoardSize int = 2
-const NumValues int = BoardSize * BoardSize
+const BoardSize int = 3
+const BlockSize int = 3
+const NumValues int = BoardSize * BlockSize
 
 type Board struct {
 	tiles                [BoardSize][BoardSize]Tile
 	numPrePopulatedTiles int
 }
 
-type TileVal struct {
-	x, y, val int
-}
-
-func New(tileValues []TileVal) Board {
+func NewBoard(tileValues []TileVal) Board {
 	tiles := [BoardSize][BoardSize]Tile{}
 
 	for i := 0; i < BoardSize; i++ {
@@ -64,6 +61,11 @@ func (board *Board) findLowestEntropyTiles() []*Tile {
 
 func (board Board) String() string {
 	return fmt.Sprintf("%v", board.tiles)
+}
+
+func (board *Board) GetBlock(x, y int) []*Tile {
+	block := []*Tile{}
+	return block
 }
 
 func (board *Board) GetTile(x, y int) *Tile {

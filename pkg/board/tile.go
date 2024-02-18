@@ -4,6 +4,10 @@ import "fmt"
 
 const Empty int = 0
 
+type TileVal struct {
+	x, y, val int
+}
+
 type Tile struct {
 	x              int
 	y              int
