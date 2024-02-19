@@ -3,10 +3,13 @@ package handlers
 import (
 	"net/http"
 	"text/template"
+
+	"github.com/rhydianjenkins/sugoku/pkg/board"
 )
 
 type PageData struct {
 	Title string
+	Tiles [board.BoardSize][board.BoardSize]board.Tile
 }
 
 func WebPageHandler(writer http.ResponseWriter, request *http.Request) {
@@ -16,8 +19,15 @@ func WebPageHandler(writer http.ResponseWriter, request *http.Request) {
 		panic(err)
 	}
 
+	b := board.NewBoard([]board.TileVal{})
+
+	for i := 0; i < board.BoardSize*board.BoardSize; i++ {
+		b.SolveOneStep()
+	}
+
 	err = template.Execute(writer, PageData{
 		Title: "Sugoku - A Sudoku solver in Go!",
+		Tiles: b.GetTiles(),
 	})
 
 	if err != nil {

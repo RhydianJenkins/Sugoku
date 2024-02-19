@@ -8,6 +8,16 @@
         <link href="/public/styles/main.css" rel="stylesheet">
     </head>
     <body>
-        <h1>Hello world!</h1>
+        <table>
+            {{range .Tiles}}
+                <tr>
+                    {{range .}}
+                        <td>
+                            {{.}}
+                        </td>
+                    {{end}}
+                </tr>
+            {{end}}
+        </table>
     </body>
 </html>
