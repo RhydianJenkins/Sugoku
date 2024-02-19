@@ -1,6 +1,7 @@
 package board
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -20,7 +21,7 @@ func TestGetCol(t *testing.T) {
 	tiles := b.GetTiles()
 
 	for i := 0; i < BoardSize; i++ {
-		if col[i].x != tiles[i][colNum].x || col[i].y != tiles[i][colNum].y {
+		if col[i].X != tiles[i][colNum].X || col[i].Y != tiles[i][colNum].Y {
 			t.Errorf("Expected 0, got %v", col[i])
 		}
 	}
@@ -68,13 +69,13 @@ func TestFindLowestEntropyTiles(t *testing.T) {
 	}
 
 	lowest := board.findLowestEntropyTiles()[0]
-	if lowest.x != 0 || lowest.y != 4 {
-		t.Errorf("Expected lowest tile to be (0, 4) but got (%v, %v)", lowest.x, lowest.y)
+	if lowest.X != 0 || lowest.Y != 4 {
+		t.Errorf("Expected lowest tile to be (0, 4) but got (%v, %v)", lowest.X, lowest.Y)
 	}
 
 	expected := []int{3, 4, 6, 7, 8, 9}
-	if !reflect.DeepEqual(expected, lowest.possibleValues) {
-		t.Errorf("Expected possible values to be %v, but got %v", expected, lowest.possibleValues)
+	if !reflect.DeepEqual(expected, lowest.PossibleValues) {
+		t.Errorf("Expected possible values to be %v, but got %v", expected, lowest.PossibleValues)
 	}
 }
 
@@ -91,7 +92,12 @@ func TestFindLowestEntropyTilesOnEmptyBoard(t *testing.T) {
 func TestSolveOneStep(t *testing.T) {
 	board := createBoard()
 	for i := 0; i < BoardSize-board.numPrePopulatedTiles; i++ {
-		solveOneStep(&board)
+		err := board.SolveOneStep()
+		if err {
+			fmt.Println(board)
+			t.Errorf("Unable to solve board")
+			break
+		}
 	}
 
 	isValid, message := boardIsValid(board)
@@ -108,7 +114,7 @@ func TestBoardIsValid(t *testing.T) {
 		t.Errorf("Expected starting board to be valid, got invalid with message %v", message)
 	}
 
-	board.GetTile(0, 1).value = 1
+	board.GetTile(0, 1).Value = 1
 	isValid, message = boardIsValid(board)
 	if isValid {
 		t.Errorf("Expected modified board to be invalid, got valid with message %v", message)
@@ -117,7 +123,7 @@ func TestBoardIsValid(t *testing.T) {
 
 func TestGetBlock(t *testing.T) {
 	board := createBoard()
-	board.GetTile(3, 4).value = 2
+	board.GetTile(3, 4).Value = 2
 	block := board.GetBlock(1, 0)
 	expected := []*Tile{
 		board.GetTile(3, 0),

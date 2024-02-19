@@ -2,7 +2,6 @@ package board
 
 import (
 	"fmt"
-	"math/rand"
 )
 
 func boardIsValid(board Board) (isValid bool, message string) {
@@ -14,7 +13,7 @@ func boardIsValid(board Board) (isValid bool, message string) {
 		seenColValues := make(map[int]bool)
 
 		for y := 0; y < BoardSize; y++ {
-			val := col[y].value
+			val := col[y].Value
 			if val == Empty {
 				continue
 			}
@@ -38,7 +37,7 @@ func boardIsValid(board Board) (isValid bool, message string) {
 		seenRowValues := make(map[int]bool)
 
 		for x := 0; x < BoardSize; x++ {
-			val := row[x].value
+			val := row[x].Value
 			if val == Empty {
 				continue
 			}
@@ -54,21 +53,6 @@ func boardIsValid(board Board) (isValid bool, message string) {
 	return true, "Board is valid"
 }
 
-func solveOneStep(board *Board) {
-	lowestEntropyTiles := board.findLowestEntropyTiles()
-
-	if len(lowestEntropyTiles) == 0 {
-		panic("No solution found. TODO backtrack")
-	}
-
-	randomTileIndex := rand.Intn(len(lowestEntropyTiles))
-	randomTile := lowestEntropyTiles[randomTileIndex]
-	randomValueIndex := rand.Intn(len(randomTile.possibleValues))
-	randomValue := randomTile.possibleValues[randomValueIndex]
-
-	randomTile.value = randomValue
-}
-
 func calculatePossibleValues(board Board, x, y int) []int {
 	tile := board.tiles[x][y]
 
@@ -76,8 +60,8 @@ func calculatePossibleValues(board Board, x, y int) []int {
 		return []int{}
 	}
 
-	row := board.GetRow(tile.x)
-	col := board.GetCol(tile.y)
+	row := board.GetRow(tile.X)
+	col := board.GetCol(tile.Y)
 	possibleValues := []int{}
 
 	for i := 0; i <= BoardSize; i++ {
@@ -86,11 +70,11 @@ func calculatePossibleValues(board Board, x, y int) []int {
 
 	for i := 0; i < BoardSize; i++ {
 		if !row[i].isEmpty() {
-			possibleValues[row[i].value] = Empty
+			possibleValues[row[i].Value] = Empty
 		}
 
 		if !col[i].isEmpty() {
-			possibleValues[col[i].value] = Empty
+			possibleValues[col[i].Value] = Empty
 		}
 	}
 
@@ -98,8 +82,8 @@ func calculatePossibleValues(board Board, x, y int) []int {
 	blocky := y / BlockSize
 	block := board.GetBlock(blockX, blocky)
 	for _, t := range block {
-		if t.value != Empty {
-			possibleValues[t.value] = Empty
+		if t.Value != Empty {
+			possibleValues[t.Value] = Empty
 		}
 	}
 

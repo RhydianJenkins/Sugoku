@@ -1,6 +1,9 @@
 package board
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 const BoardSize int = 9
 const BlockSize int = 3
@@ -20,7 +23,7 @@ func NewBoard(tileValues []TileVal) Board {
 	}
 
 	for _, tileVal := range tileValues {
-		tiles[tileVal.x][tileVal.y].value = tileVal.val
+		tiles[tileVal.x][tileVal.y].Value = tileVal.val
 	}
 
 	return Board{
@@ -36,7 +39,7 @@ func (board *Board) findLowestEntropyTiles() []*Tile {
 	for x := 0; x < BoardSize; x++ {
 		for y := 0; y < BoardSize; y++ {
 			tile := board.GetTile(x, y)
-			tile.possibleValues = calculatePossibleValues(*board, x, y)
+			tile.PossibleValues = calculatePossibleValues(*board, x, y)
 			tileEntropy := tile.GetEntropy()
 
 			if tileEntropy < lowestEntropy && tileEntropy > 0 {
@@ -56,6 +59,23 @@ func (board *Board) findLowestEntropyTiles() []*Tile {
 	}
 
 	return lowestEntropyTiles
+}
+
+func (board *Board) SolveOneStep() (error bool) {
+	lowestEntropyTiles := board.findLowestEntropyTiles()
+
+	if len(lowestEntropyTiles) == 0 {
+		return true
+	}
+
+	randomTileIndex := rand.Intn(len(lowestEntropyTiles))
+	randomTile := lowestEntropyTiles[randomTileIndex]
+	randomValueIndex := rand.Intn(len(randomTile.PossibleValues))
+	randomValue := randomTile.PossibleValues[randomValueIndex]
+
+	randomTile.Value = randomValue
+
+	return false
 }
 
 func (board Board) String() string {
