@@ -29,6 +29,10 @@ func (tile Tile) isEmpty() bool {
 }
 
 func (tile Tile) String() string {
+	if tile.Value == Empty {
+		return ""
+	}
+
 	return fmt.Sprintf("%d", tile.Value)
 }
 
