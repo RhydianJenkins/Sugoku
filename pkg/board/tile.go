@@ -29,7 +29,7 @@ func (tile Tile) isEmpty() bool {
 }
 
 func (tile Tile) String() string {
-	return fmt.Sprintf("[ %d ]", tile.value)
+	return fmt.Sprintf("[%d]", tile.value)
 }
 
 func (tile Tile) GetEntropy() int {
