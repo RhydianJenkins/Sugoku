@@ -80,17 +80,17 @@ func calculatePossibleValues(board Board, x, y int) []int {
 	col := board.GetCol(tile.y)
 	possibleValues := []int{}
 
-	for i := 1; i <= BoardSize; i++ {
+	for i := 0; i <= BoardSize; i++ {
 		possibleValues = append(possibleValues, i)
 	}
 
 	for i := 0; i < BoardSize; i++ {
 		if !row[i].isEmpty() {
-			possibleValues[row[i].value-1] = Empty
+			possibleValues[row[i].value] = Empty
 		}
 
 		if !col[i].isEmpty() {
-			possibleValues[col[i].value-1] = Empty
+			possibleValues[col[i].value] = Empty
 		}
 	}
 
@@ -99,7 +99,7 @@ func calculatePossibleValues(board Board, x, y int) []int {
 	block := board.GetBlock(blockX, blocky)
 	for _, t := range block {
 		if t.value != Empty {
-			possibleValues[t.value-1] = Empty
+			possibleValues[t.value] = Empty
 		}
 	}
 
