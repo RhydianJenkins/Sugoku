@@ -36,6 +36,18 @@ func TestCalculatePossibleValuesWithNonEmptyVal(t *testing.T) {
 	}
 }
 
+func TestCalculatePossibleValuesWithBadValues(t *testing.T) {
+	board := createBoard()
+	board.GetTile(2, 3).BadValues = append(board.GetTile(2, 3).BadValues, 1)
+	board.GetTile(2, 3).BadValues = append(board.GetTile(2, 3).BadValues, 4)
+	returned := calculatePossibleValues(board, 2, 3)
+	expected := []int{2, 3, 5, 6, 7, 8, 9}
+
+	if !reflect.DeepEqual(expected, returned) {
+		t.Errorf("Expected %v, got %v", expected, returned)
+	}
+}
+
 func TestCalculatePossibleValuesWithEmptyVal(t *testing.T) {
 	returned := calculatePossibleValues(createBoard(), 0, 1)
 	expected := []int{2, 3, 4, 5, 6, 7, 8, 9}
@@ -74,8 +86,8 @@ func TestFindLowestEntropyTiles(t *testing.T) {
 	}
 
 	expected := []int{3, 4, 6, 7, 8, 9}
-	if !reflect.DeepEqual(expected, lowest.PossibleValues) {
-		t.Errorf("Expected possible values to be %v, but got %v", expected, lowest.PossibleValues)
+	if !reflect.DeepEqual(expected, lowest.possibleValues) {
+		t.Errorf("Expected possible values to be %v, but got %v", expected, lowest.possibleValues)
 	}
 }
 
@@ -92,10 +104,10 @@ func TestFindLowestEntropyTilesOnEmptyBoard(t *testing.T) {
 func TestSolveOneStep(t *testing.T) {
 	board := createBoard()
 	for i := 0; i < BoardSize-board.numPrePopulatedTiles; i++ {
-		err := board.SolveOneStep()
+		err, msg := board.solveOneStep()
 		if err {
 			fmt.Println(board)
-			t.Errorf("Unable to solve board")
+			t.Errorf("Unable to solve board. Message: %v", msg)
 			break
 		}
 	}
@@ -114,7 +126,7 @@ func TestSolveOneAddsToHistory(t *testing.T) {
 		t.Errorf("Expected history to not be empty")
 	}
 
-	board.SolveOneStep()
+	board.solveOneStep()
 	if len(board.history.tiles) != 2 {
 		t.Errorf("Expected history to have 2 tiles, got %v", len(board.history.tiles))
 	}
@@ -152,5 +164,30 @@ func TestGetBlock(t *testing.T) {
 
 	if !reflect.DeepEqual(expected, block) {
 		t.Errorf("Expected %v, got %v", expected, block)
+	}
+}
+
+func TestSolve(t *testing.T) {
+	board := NewBoard([]TileVal{})
+	solvedBefore := board.isSolved()
+
+	if solvedBefore {
+		t.Errorf("Expected board to be unsolved before solving")
+	}
+
+	err, msg := board.Solve()
+	isValid, message := boardIsValid(board)
+	solved := board.isSolved()
+
+	if err {
+		t.Errorf("Solve returned error with message '%v'", msg)
+	}
+
+	if !isValid {
+		t.Errorf("Expected board to be valid, got invalid with message '%v'", message)
+	}
+
+	if !solved {
+		t.Errorf("board.isSolved() returned false")
 	}
 }

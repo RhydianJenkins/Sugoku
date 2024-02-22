@@ -33,6 +33,39 @@ func NewBoard(tileValues []TileVal) Board {
 	}
 }
 
+func (board *Board) Solve() (err bool, msg string) {
+	for {
+		err, _ := board.solveOneStep()
+		if err {
+			poppedTile, empty := board.history.pop()
+			if empty {
+				return true, "Board is unsolvable"
+			}
+
+			badValue := poppedTile.Value
+			poppedTile.Value = Empty
+			poppedTile.BadValues = append(poppedTile.BadValues, badValue)
+		}
+
+		if board.isSolved() {
+			return false, "Board is solved"
+		}
+	}
+}
+
+func (board Board) isSolved() bool {
+	for x := 0; x < BoardSize; x++ {
+		for y := 0; y < BoardSize; y++ {
+			tile := board.GetTile(x, y)
+			if tile.isEmpty() {
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
 func (board *Board) findLowestEntropyTiles() []*Tile {
 	lowestEntropy := BoardSize
 	lowestEntropyTiles := []*Tile{}
@@ -40,7 +73,7 @@ func (board *Board) findLowestEntropyTiles() []*Tile {
 	for x := 0; x < BoardSize; x++ {
 		for y := 0; y < BoardSize; y++ {
 			tile := board.GetTile(x, y)
-			tile.PossibleValues = calculatePossibleValues(*board, x, y)
+			tile.possibleValues = calculatePossibleValues(*board, x, y)
 			tileEntropy := tile.GetEntropy()
 
 			if tileEntropy < lowestEntropy && tileEntropy > 0 {
@@ -62,23 +95,23 @@ func (board *Board) findLowestEntropyTiles() []*Tile {
 	return lowestEntropyTiles
 }
 
-func (board *Board) SolveOneStep() (error bool) {
+func (board *Board) solveOneStep() (error bool, msg string) {
 	lowestEntropyTiles := board.findLowestEntropyTiles()
 
 	if len(lowestEntropyTiles) == 0 {
-		return true
+		return true, "No tiles found with lowest entropy"
 	}
 
 	randomTileIndex := rand.Intn(len(lowestEntropyTiles))
 	randomTile := lowestEntropyTiles[randomTileIndex]
-	randomValueIndex := rand.Intn(len(randomTile.PossibleValues))
-	randomValue := randomTile.PossibleValues[randomValueIndex]
+	randomValueIndex := rand.Intn(len(randomTile.possibleValues))
+	randomValue := randomTile.possibleValues[randomValueIndex]
 
 	randomTile.Value = randomValue
 
 	board.history.push(randomTile)
 
-	return false
+	return false, fmt.Sprintf("Tile (%d, %d) given value %d", randomTile.X, randomTile.Y, randomTile.Value)
 }
 
 func (board Board) String() string {

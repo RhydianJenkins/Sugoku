@@ -20,10 +20,7 @@ func WebPageHandler(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	b := board.NewBoard([]board.TileVal{})
-
-	for i := 0; i < board.BoardSize*board.BoardSize; i++ {
-		b.SolveOneStep()
-	}
+	b.Solve()
 
 	err = template.Execute(writer, PageData{
 		Title: "Sugoku - A Sudoku solver in Go!",

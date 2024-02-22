@@ -68,6 +68,10 @@ func calculatePossibleValues(board Board, x, y int) []int {
 		possibleValues = append(possibleValues, i)
 	}
 
+	for _, val := range tile.BadValues {
+		possibleValues[val] = Empty
+	}
+
 	for i := 0; i < BoardSize; i++ {
 		if !row[i].isEmpty() {
 			possibleValues[row[i].Value] = Empty

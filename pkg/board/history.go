@@ -17,7 +17,7 @@ func (h *HistoryStack) pop() (tile *Tile, empty bool) {
 	poppedTile := h.tiles[numTiles-1]
 	h.tiles = h.tiles[:numTiles-1]
 
-	return poppedTile, h.isEmpty()
+	return poppedTile, false
 }
 
 func (h HistoryStack) isEmpty() bool {

@@ -9,10 +9,11 @@ type TileVal struct {
 }
 
 type Tile struct {
-	X              int   `json:"x"`
-	Y              int   `json:"y"`
-	Value          int   `json:"value"`
-	PossibleValues []int `json:"possibleValues"`
+	X              int `json:"x"`
+	Y              int `json:"y"`
+	Value          int `json:"value"`
+	possibleValues []int
+	BadValues      []int
 }
 
 func NewTile(x, y int) Tile {
@@ -20,7 +21,8 @@ func NewTile(x, y int) Tile {
 		X:              x,
 		Y:              y,
 		Value:          Empty,
-		PossibleValues: []int{},
+		possibleValues: []int{},
+		BadValues:      []int{},
 	}
 }
 
@@ -37,5 +39,5 @@ func (tile Tile) String() string {
 }
 
 func (tile Tile) GetEntropy() int {
-	return len(tile.PossibleValues)
+	return len(tile.possibleValues)
 }

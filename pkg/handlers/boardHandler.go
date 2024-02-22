@@ -20,10 +20,7 @@ func BoardHandler(writer http.ResponseWriter, request *http.Request) {
 
 	initialTileVals := []board.TileVal{}
 	b := board.NewBoard(initialTileVals)
-
-	for i := 0; i < board.BoardSize*board.BoardSize; i++ {
-		b.SolveOneStep()
-	}
+	b.Solve()
 
 	response := Response{
 		Tiles: b.GetTiles(),
