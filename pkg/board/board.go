@@ -39,7 +39,7 @@ func (board *Board) Solve() (err bool, msg string) {
 		if err {
 			poppedTile, empty := board.history.pop()
 			if empty {
-				return true, "Board is unsolvable"
+				return true, "Tried to backtrack with empty history. Board is unsolvable"
 			}
 
 			badValue := poppedTile.Value
