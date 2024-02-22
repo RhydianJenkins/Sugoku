@@ -11,6 +11,7 @@ const BlockSize int = 3
 type Board struct {
 	tiles                [BoardSize][BoardSize]Tile
 	numPrePopulatedTiles int
+	history              HistoryStack
 }
 
 func NewBoard(tileValues []TileVal) Board {
@@ -74,6 +75,8 @@ func (board *Board) SolveOneStep() (error bool) {
 	randomValue := randomTile.PossibleValues[randomValueIndex]
 
 	randomTile.Value = randomValue
+
+	board.history.push(randomTile)
 
 	return false
 }

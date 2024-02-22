@@ -7,9 +7,9 @@ import (
 )
 
 func createBoard() Board {
-	b := NewBoard([]TileVal{
-		TileVal{0, 0, 1},
-	})
+	firstTile := TileVal{0, 0, 1}
+	b := NewBoard([]TileVal{firstTile})
+	b.history.push(b.GetTile(0, 0))
 
 	return b
 }
@@ -104,6 +104,19 @@ func TestSolveOneStep(t *testing.T) {
 
 	if !isValid {
 		t.Errorf("Expected board to be valid, got invalid with message %v", message)
+	}
+}
+
+func TestSolveOneAddsToHistory(t *testing.T) {
+	board := createBoard()
+
+	if board.history.isEmpty() {
+		t.Errorf("Expected history to not be empty")
+	}
+
+	board.SolveOneStep()
+	if len(board.history.tiles) != 2 {
+		t.Errorf("Expected history to have 2 tiles, got %v", len(board.history.tiles))
 	}
 }
 
