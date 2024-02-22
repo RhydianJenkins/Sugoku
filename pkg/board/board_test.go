@@ -175,12 +175,12 @@ func TestSolve(t *testing.T) {
 		t.Errorf("Expected board to be unsolved before solving")
 	}
 
-	err, msg := board.Solve()
+	err := board.Solve()
 	isValid, message := boardIsValid(board)
 	solved := board.isSolved()
 
-	if err {
-		t.Errorf("Solve returned error with message '%v'", msg)
+	if err != nil {
+		t.Errorf("Solve returned error with message '%v'", err)
 	}
 
 	if !isValid {

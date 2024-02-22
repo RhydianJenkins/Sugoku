@@ -33,13 +33,13 @@ func NewBoard(tileValues []TileVal) Board {
 	}
 }
 
-func (board *Board) Solve() (err bool, msg string) {
+func (board *Board) Solve() error {
 	for {
 		err, _ := board.solveOneStep()
 		if err {
 			poppedTile, empty := board.history.pop()
 			if empty {
-				return true, "Tried to backtrack with empty history. Board is unsolvable"
+				return fmt.Errorf("Tried to backtrack with empty history. Board is unsolvable")
 			}
 
 			badValue := poppedTile.Value
@@ -48,7 +48,7 @@ func (board *Board) Solve() (err bool, msg string) {
 		}
 
 		if board.isSolved() {
-			return false, "Board is solved"
+			return nil
 		}
 	}
 }
