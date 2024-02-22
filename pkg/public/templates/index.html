@@ -38,7 +38,7 @@
                         cells.push({
                             x,
                             y,
-                            val: parseInt(cell.textContent, 10)
+                            val: parseInt(cell.textContent || 0, 10)
                         });
                     });
 
@@ -65,7 +65,7 @@
 
                     row.forEach(cell => {
                         const td = document.createElement('td');
-                        td.textContent = cell.value;
+                        td.textContent = cell.value || '';
                         sudokuRow.appendChild(td);
                     });
 

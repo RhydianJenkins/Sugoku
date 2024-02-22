@@ -31,7 +31,7 @@ func (tile Tile) isEmpty() bool {
 }
 
 func (tile Tile) String() string {
-	if tile.Value == Empty {
+	if tile.isEmpty() {
 		return ""
 	}
 
