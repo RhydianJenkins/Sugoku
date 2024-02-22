@@ -35,8 +35,9 @@ func NewBoard(tileValues []TileVal) Board {
 
 func (board *Board) Solve() error {
 	for {
-		err, _ := board.solveOneStep()
-		if err {
+		err := board.solveOneStep()
+
+		if err != nil {
 			poppedTile, empty := board.history.pop()
 			if empty {
 				return fmt.Errorf("Tried to backtrack with empty history. Board is unsolvable")
@@ -64,6 +65,55 @@ func (board Board) isSolved() bool {
 	}
 
 	return true
+}
+
+func (board Board) isValid() (isValid bool, message string) {
+	seenValues := make(map[int]bool)
+
+	// check columns are unique
+	for x := 0; x < BoardSize; x++ {
+		col := board.GetCol(x)
+		seenColValues := make(map[int]bool)
+
+		for y := 0; y < BoardSize; y++ {
+			val := col[y].Value
+			if val == Empty {
+				continue
+			}
+
+			if seenColValues[val] {
+				return false, fmt.Sprintf("Val %d is not unique in col", val)
+			}
+
+			if seenValues[val] {
+				return false, fmt.Sprintf("Val %d is not unique in board", val)
+			}
+
+			seenColValues[val] = true
+			seenValues[val] = true
+		}
+	}
+
+	// check rows are unique
+	for y := 0; y < BoardSize; y++ {
+		row := board.GetRow(y)
+		seenRowValues := make(map[int]bool)
+
+		for x := 0; x < BoardSize; x++ {
+			val := row[x].Value
+			if val == Empty {
+				continue
+			}
+
+			if seenRowValues[val] {
+				return false, fmt.Sprintf("Val %d is not unique in row %d", val, x)
+			}
+
+			seenRowValues[val] = true
+		}
+	}
+
+	return true, "Board is valid"
 }
 
 func (board *Board) findLowestEntropyTiles() []*Tile {
@@ -95,11 +145,11 @@ func (board *Board) findLowestEntropyTiles() []*Tile {
 	return lowestEntropyTiles
 }
 
-func (board *Board) solveOneStep() (error bool, msg string) {
+func (board *Board) solveOneStep() error {
 	lowestEntropyTiles := board.findLowestEntropyTiles()
 
 	if len(lowestEntropyTiles) == 0 {
-		return true, "No tiles found with lowest entropy"
+		return fmt.Errorf("No tiles found with lowest entropy")
 	}
 
 	randomTileIndex := rand.Intn(len(lowestEntropyTiles))
@@ -111,7 +161,7 @@ func (board *Board) solveOneStep() (error bool, msg string) {
 
 	board.history.push(randomTile)
 
-	return false, fmt.Sprintf("Tile (%d, %d) given value %d", randomTile.X, randomTile.Y, randomTile.Value)
+	return nil
 }
 
 func (board Board) String() string {

@@ -1,7 +1,6 @@
 package board
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 )
@@ -104,15 +103,14 @@ func TestFindLowestEntropyTilesOnEmptyBoard(t *testing.T) {
 func TestSolveOneStep(t *testing.T) {
 	board := createBoard()
 	for i := 0; i < BoardSize-board.numPrePopulatedTiles; i++ {
-		err, msg := board.solveOneStep()
-		if err {
-			fmt.Println(board)
-			t.Errorf("Unable to solve board. Message: %v", msg)
+		err := board.solveOneStep()
+		if err != nil {
+			t.Errorf("Unable to solve board. Error: %v", err)
 			break
 		}
 	}
 
-	isValid, message := boardIsValid(board)
+	isValid, message := board.isValid()
 
 	if !isValid {
 		t.Errorf("Expected board to be valid, got invalid with message %v", message)
@@ -134,13 +132,13 @@ func TestSolveOneAddsToHistory(t *testing.T) {
 
 func TestBoardIsValid(t *testing.T) {
 	board := createBoard()
-	isValid, message := boardIsValid(board)
+	isValid, message := board.isValid()
 	if !isValid {
 		t.Errorf("Expected starting board to be valid, got invalid with message %v", message)
 	}
 
 	board.GetTile(0, 1).Value = 1
-	isValid, message = boardIsValid(board)
+	isValid, message = board.isValid()
 	if isValid {
 		t.Errorf("Expected modified board to be invalid, got valid with message %v", message)
 	}
@@ -176,7 +174,7 @@ func TestSolve(t *testing.T) {
 	}
 
 	err := board.Solve()
-	isValid, message := boardIsValid(board)
+	isValid, message := board.isValid()
 	solved := board.isSolved()
 
 	if err != nil {

@@ -31,6 +31,6 @@ func WebPageHandler(writer http.ResponseWriter, request *http.Request) {
 	})
 
 	if err != nil {
-		panic(solveErr)
+		panic(err)
 	}
 }
