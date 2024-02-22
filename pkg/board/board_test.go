@@ -173,7 +173,7 @@ func TestSolve(t *testing.T) {
 		t.Errorf("Expected board to be unsolved before solving")
 	}
 
-	err := board.Solve()
+	err := board.Solve(999)
 	isValid, message := board.isValid()
 	solved := board.isSolved()
 

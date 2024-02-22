@@ -5,7 +5,7 @@ import "fmt"
 const Empty int = 0
 
 type TileVal struct {
-	x, y, val int
+	X, Y, Val int
 }
 
 type Tile struct {

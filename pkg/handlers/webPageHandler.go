@@ -8,17 +8,13 @@ import (
 )
 
 type PageData struct {
-	Title string
-	Tiles [board.BoardSize][board.BoardSize]board.Tile
+	Title   string
+	Tiles   [board.BoardSize][board.BoardSize]board.Tile
+	History []*board.Tile
 }
 
 func WebPageHandler(writer http.ResponseWriter, request *http.Request) {
 	b := board.NewBoard([]board.TileVal{})
-
-	solveErr := b.Solve()
-	if solveErr != nil {
-		panic(solveErr)
-	}
 
 	template, parseErr := template.ParseFiles("pkg/public/templates/index.html")
 	if parseErr != nil {
@@ -26,8 +22,9 @@ func WebPageHandler(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	err := template.Execute(writer, PageData{
-		Title: "Sugoku - A Sudoku solver in Go!",
-		Tiles: b.GetTiles(),
+		Title:   "Sugoku - A Sudoku solver in Go!",
+		Tiles:   b.GetTiles(),
+		History: b.GetHistory(),
 	})
 
 	if err != nil {

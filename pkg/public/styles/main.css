@@ -1,3 +1,11 @@
+section {
+    display: flex;
+    margin: 1em;
+    padding: 1em;
+    justify-content: center;
+    gap: 1em;
+}
+
 table {
     margin: auto;
     margin-top: 1em;

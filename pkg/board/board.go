@@ -24,7 +24,7 @@ func NewBoard(tileValues []TileVal) Board {
 	}
 
 	for _, tileVal := range tileValues {
-		tiles[tileVal.x][tileVal.y].Value = tileVal.val
+		tiles[tileVal.X][tileVal.Y].Value = tileVal.Val
 	}
 
 	return Board{
@@ -33,8 +33,8 @@ func NewBoard(tileValues []TileVal) Board {
 	}
 }
 
-func (board *Board) Solve() error {
-	for {
+func (board *Board) Solve(numIterations int) error {
+	for i := 0; i < numIterations; i++ {
 		err := board.solveOneStep()
 
 		if err != nil {
@@ -52,6 +52,8 @@ func (board *Board) Solve() error {
 			return nil
 		}
 	}
+
+	return nil
 }
 
 func (board Board) isSolved() bool {
@@ -200,4 +202,8 @@ func (board Board) GetCol(y int) [BoardSize]Tile {
 	}
 
 	return col
+}
+
+func (board Board) GetHistory() []*Tile {
+	return board.history.tiles
 }

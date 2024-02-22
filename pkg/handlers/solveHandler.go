@@ -7,12 +7,11 @@ import (
 	"github.com/rhydianjenkins/sugoku/pkg/board"
 )
 
-type Response struct {
+type BoardResponse struct {
 	Tiles [board.BoardSize][board.BoardSize]board.Tile `json:"tiles"`
 }
 
-// TODO /api/solve/1 solves just one step of a Board and /api/solve solves the whole board
-func BoardHandler(writer http.ResponseWriter, request *http.Request) {
+func SolveHandler(writer http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodPost {
 		http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -20,9 +19,9 @@ func BoardHandler(writer http.ResponseWriter, request *http.Request) {
 
 	initialTileVals := []board.TileVal{}
 	b := board.NewBoard(initialTileVals)
-	b.Solve()
+	b.Solve(999)
 
-	response := Response{
+	response := BoardResponse{
 		Tiles: b.GetTiles(),
 	}
 
