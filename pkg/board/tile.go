@@ -4,10 +4,6 @@ import "fmt"
 
 const Empty int = 0
 
-type TileVal struct {
-	X, Y, Val int
-}
-
 type Tile struct {
 	X              int `json:"x"`
 	Y              int `json:"y"`

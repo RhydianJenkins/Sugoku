@@ -17,8 +17,7 @@ func SolveHandler(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	initialTileVals := []board.TileVal{}
-	b := board.NewBoard(initialTileVals)
+	b := board.NewEmptyBoard()
 	b.Solve(999)
 
 	response := BoardResponse{

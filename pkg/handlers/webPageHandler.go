@@ -13,7 +13,7 @@ type PageData struct {
 }
 
 func WebPageHandler(writer http.ResponseWriter, request *http.Request) {
-	b := board.NewBoard([]board.TileVal{})
+	b := board.NewEmptyBoard()
 
 	template, parseErr := template.ParseFiles("pkg/public/templates/index.html")
 	if parseErr != nil {

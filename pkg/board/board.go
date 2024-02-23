@@ -14,17 +14,20 @@ type Board struct {
 	history              HistoryStack
 }
 
-func NewBoard(tileValues []TileVal) Board {
+func NewEmptyBoard() Board {
+	tileValues := [BoardSize][BoardSize]int{}
+	return NewBoard(tileValues)
+}
+
+func NewBoard(tileValues [BoardSize][BoardSize]int) Board {
 	tiles := [BoardSize][BoardSize]Tile{}
 
 	for x := 0; x < BoardSize; x++ {
 		for y := 0; y < BoardSize; y++ {
-			tiles[x][y] = NewTile(x, y)
+			newTile := NewTile(x, y)
+			newTile.Value = tileValues[x][y]
+			tiles[x][y] = newTile
 		}
-	}
-
-	for _, tileVal := range tileValues {
-		tiles[tileVal.X][tileVal.Y].Value = tileVal.Val
 	}
 
 	return Board{
@@ -152,9 +155,7 @@ func (board *Board) solveOneStep() error {
 	randomValueIndex := rand.Intn(len(randomTile.possibleValues))
 	randomValue := randomTile.possibleValues[randomValueIndex]
 
-	randomTile.Value = randomValue
-
-	board.history.push(randomTile)
+	board.SetTileValue(randomTile.X, randomTile.Y, randomValue)
 
 	return nil
 }
@@ -173,6 +174,11 @@ func (board *Board) GetBlock(x, y int) []*Tile {
 	}
 
 	return block
+}
+
+func (board *Board) SetTileValue(x, y, val int) {
+	board.history.push(board.GetTile(x, y))
+	board.tiles[x][y].Value = val
 }
 
 func (board *Board) GetTile(x, y int) *Tile {

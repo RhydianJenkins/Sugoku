@@ -8,7 +8,7 @@ import (
 )
 
 type StepRequest struct {
-	Tiles [board.BoardSize][board.BoardSize]board.TileVal `json:"tiles"`
+	Tiles [board.BoardSize][board.BoardSize]int `json:"tiles"`
 }
 
 type StepResponse struct {
@@ -28,14 +28,7 @@ func StepHandler(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	initialTileVals := []board.TileVal{}
-	for x := 0; x < board.BoardSize; x++ {
-		for y := 0; y < board.BoardSize; y++ {
-			initialTileVals = append(initialTileVals, stepRequest.Tiles[x][y])
-		}
-	}
-
-	b := board.NewBoard(initialTileVals)
+	b := board.NewBoard(stepRequest.Tiles)
 	b.Solve(1)
 
 	response := StepResponse{

@@ -6,9 +6,8 @@ import (
 )
 
 func createBoard() Board {
-	firstTile := TileVal{0, 0, 1}
-	b := NewBoard([]TileVal{firstTile})
-	b.history.push(b.GetTile(0, 0))
+	b := NewEmptyBoard()
+	b.SetTileValue(0, 0, 1)
 
 	return b
 }
@@ -66,12 +65,7 @@ func TestFilterEmpty(t *testing.T) {
 }
 
 func TestFindLowestEntropyTiles(t *testing.T) {
-	board := NewBoard([]TileVal{
-		TileVal{0, 0, 1},
-		TileVal{1, 1, 2},
-		TileVal{4, 4, 2},
-		TileVal{5, 4, 5},
-	})
+	board := NewEmptyBoard()
 	numReturned := len(board.findLowestEntropyTiles())
 	numExpected := 1
 
@@ -91,7 +85,7 @@ func TestFindLowestEntropyTiles(t *testing.T) {
 }
 
 func TestFindLowestEntropyTilesOnEmptyBoard(t *testing.T) {
-	board := NewBoard([]TileVal{})
+	board := NewEmptyBoard()
 	numReturned := len(board.findLowestEntropyTiles())
 	numExpected := BoardSize * BoardSize
 
@@ -166,7 +160,7 @@ func TestGetBlock(t *testing.T) {
 }
 
 func TestSolve(t *testing.T) {
-	board := NewBoard([]TileVal{})
+	board := NewEmptyBoard()
 	solvedBefore := board.isSolved()
 
 	if solvedBefore {
