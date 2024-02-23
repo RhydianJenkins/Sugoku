@@ -70,8 +70,6 @@ func (board Board) isSolved() bool {
 }
 
 func (board Board) isValid() (isValid bool, message string) {
-	seenValues := make(map[int]bool)
-
 	// check columns are unique
 	for x := 0; x < BoardSize; x++ {
 		col := board.GetCol(x)
@@ -87,12 +85,7 @@ func (board Board) isValid() (isValid bool, message string) {
 				return false, fmt.Sprintf("Val %d is not unique in col", val)
 			}
 
-			if seenValues[val] {
-				return false, fmt.Sprintf("Val %d is not unique in board", val)
-			}
-
 			seenColValues[val] = true
-			seenValues[val] = true
 		}
 	}
 
