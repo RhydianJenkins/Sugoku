@@ -8,16 +8,16 @@ func (h *HistoryStack) push(tile *Tile) {
 	h.tiles = append(h.tiles, tile)
 }
 
-func (h *HistoryStack) pop() (tile *Tile, empty bool) {
+func (h *HistoryStack) pop() *Tile {
 	if h.isEmpty() {
-		return &Tile{}, true
+		return nil
 	}
 
 	numTiles := len(h.tiles)
 	poppedTile := h.tiles[numTiles-1]
 	h.tiles = h.tiles[:numTiles-1]
 
-	return poppedTile, h.isEmpty()
+	return poppedTile
 }
 
 func (h HistoryStack) isEmpty() bool {

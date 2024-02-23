@@ -7,15 +7,69 @@
         <link href="/public/styles/reset.css" rel="stylesheet">
         <link href="/public/styles/main.css" rel="stylesheet">
     </head>
+
     <body>
-        <table>
-            {{range .Tiles}}
-                <tr>
-                    {{range .}}
-                        <td>{{.}}</td>
-                    {{end}}
-                </tr>
-            {{end}}
-        </table>
+        <section>
+            <table id="sudoku">
+                {{range .Tiles}}
+                    <tr>
+                        {{range .}}
+                            <td>{{.}}</td>
+                        {{end}}
+                    </tr>
+                {{end}}
+            </table>
+        </section>
+
+        <section>
+            <button onClick="callApi('/api/solve')">Solve</button>
+            <button onClick="callApi('/api/step')">Step</button>
+        </section>
+
+        <script>
+            const getTilesFromTable = () => {
+                const table = document.querySelector('#sudoku');
+                const tiles = [];
+
+                // create a 2D array of tiles
+                for (let i = 0; i < table.rows.length; i++) {
+                    const row = table.rows[i];
+                    const tileRow = [];
+                    for (let j = 0; j < row.cells.length; j++) {
+                        const cell = row.cells[j];
+                        const val = parseInt(cell.textContent || 0, 10)
+                        tileRow.push(val);
+                    }
+                    tiles.push(tileRow);
+                }
+
+                return tiles;
+            }
+
+            const callApi = async (endpoint) => {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        tiles: getTilesFromTable(),
+                    }),
+                });
+                const { tiles } = await response.json();
+                const sudokuTable = document.querySelector('#sudoku');
+
+                sudokuTable.innerHTML = '';
+
+                tiles.forEach(row => {
+                    const sudokuRow = document.createElement('tr');
+
+                    row.forEach(cell => {
+                        const td = document.createElement('td');
+                        td.textContent = cell.value || '';
+                        sudokuRow.appendChild(td);
+                    });
+
+                    sudokuTable.appendChild(sudokuRow);
+                });
+            }
+        </script>
     </body>
 </html>

@@ -13,19 +13,14 @@ type PageData struct {
 }
 
 func WebPageHandler(writer http.ResponseWriter, request *http.Request) {
-	template, err := template.ParseFiles("pkg/public/templates/index.html")
+	b := board.NewEmptyBoard()
 
-	if err != nil {
-		panic(err)
+	template, parseErr := template.ParseFiles("pkg/public/templates/index.html")
+	if parseErr != nil {
+		panic(parseErr)
 	}
 
-	b := board.NewBoard([]board.TileVal{})
-
-	for i := 0; i < board.BoardSize*board.BoardSize; i++ {
-		b.SolveOneStep()
-	}
-
-	err = template.Execute(writer, PageData{
+	err := template.Execute(writer, PageData{
 		Title: "Sugoku - A Sudoku solver in Go!",
 		Tiles: b.GetTiles(),
 	})
