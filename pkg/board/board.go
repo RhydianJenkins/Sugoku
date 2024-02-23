@@ -3,6 +3,7 @@ package board
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 )
 
 const BoardSize int = 9
@@ -22,7 +23,7 @@ func NewEmptyBoard() Board {
 func NewBoard(tileValues [BoardSize][BoardSize]int) Board {
 	tiles := [BoardSize][BoardSize]Tile{}
 	numPrePopulatedTiles := 0
-	// Being with an empty history, assuming the given board is solvable
+	// Begin with an empty history, assuming the given board is solvable
 	history := HistoryStack{}
 
 	for x := 0; x < BoardSize; x++ {
@@ -46,6 +47,12 @@ func NewBoard(tileValues [BoardSize][BoardSize]int) Board {
 
 func (board *Board) Solve(numIterations int) error {
 	for i := 0; i < numIterations; i++ {
+		allTilesPopulated, _ := board.allTilesPopulated()
+		isValid, _ := board.isValid()
+		if allTilesPopulated && isValid {
+			return nil
+		}
+
 		err := board.solveOneStep()
 
 		if err != nil {
@@ -58,17 +65,12 @@ func (board *Board) Solve(numIterations int) error {
 			poppedTile.Value = Empty
 			poppedTile.BadValues = append(poppedTile.BadValues, badValue)
 		}
-
-		solved, _ := board.isSolved()
-		if solved {
-			return nil
-		}
 	}
 
 	return nil
 }
 
-func (board Board) isSolved() (solved bool, message string) {
+func (board Board) allTilesPopulated() (solved bool, message string) {
 	for x := 0; x < BoardSize; x++ {
 		for y := 0; y < BoardSize; y++ {
 			tile := board.GetTile(x, y)
@@ -196,7 +198,18 @@ func (board *Board) solveOneStep() error {
 }
 
 func (board Board) String() string {
-	return fmt.Sprintf("%v", board.tiles)
+	var sb strings.Builder
+	tiles := board.GetTiles()
+
+	for x := 0; x < BoardSize; x++ {
+		for y := 0; y < BoardSize; y++ {
+			sb.WriteString(fmt.Sprintf("[%d]", tiles[x][y].Value))
+		}
+
+		sb.WriteString("\n")
+	}
+
+	return sb.String()
 }
 
 func (board *Board) GetBlock(x, y int) []*Tile {

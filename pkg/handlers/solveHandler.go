@@ -18,7 +18,7 @@ func SolveHandler(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	b := board.NewEmptyBoard()
-	b.Solve(999)
+	b.Solve(board.BoardSize * board.BoardSize * 3)
 
 	response := BoardResponse{
 		Tiles: b.GetTiles(),

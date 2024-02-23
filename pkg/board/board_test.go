@@ -165,15 +165,15 @@ func TestGetBlock(t *testing.T) {
 
 func TestSolve(t *testing.T) {
 	board := NewEmptyBoard()
-	solvedBefore, _ := board.isSolved()
+	allTilesPopulatedBefore, _ := board.allTilesPopulated()
 
-	if solvedBefore {
+	if allTilesPopulatedBefore {
 		t.Errorf("Expected board to be unsolved before solving")
 	}
 
 	err := board.Solve(999)
 	isValid, validMessage := board.isValid()
-	solved, solvedMessage := board.isSolved()
+	allTilesPopulated, solvedMessage := board.allTilesPopulated()
 
 	if err != nil {
 		t.Errorf("Solve returned error with message '%v'", err)
@@ -183,12 +183,12 @@ func TestSolve(t *testing.T) {
 		t.Errorf("Expected board to be valid, got invalid with message '%v'", validMessage)
 	}
 
-	if !solved {
+	if !allTilesPopulated {
 		t.Errorf("board.isSolved() returned false with message %v", solvedMessage)
 	}
 }
 
-func TestFullySolved(t *testing.T) {
+func TestFullySolvedIsSolvedAndValid(t *testing.T) {
 	board := NewEmptyBoard()
 
 	for x := 0; x < BoardSize; x++ {
@@ -199,8 +199,40 @@ func TestFullySolved(t *testing.T) {
 		}
 	}
 
-	solved, solvedMessage := board.isSolved()
-	if !solved {
+	allTilesPopulated, solvedMessage := board.allTilesPopulated()
+	if !allTilesPopulated {
+		t.Errorf("Board is not solved with message '%v'", solvedMessage)
+	}
+
+	isValid, message := board.isValid()
+	if !isValid {
+		t.Errorf("Expected board to be valid but got invalid with message '%v'", message)
+	}
+}
+
+func TestPartiallySolvedWithBacktracking(t *testing.T) {
+	board := NewEmptyBoard()
+
+	for x := 0; x < BoardSize; x++ {
+		offset := ((x * BlockSize) % BoardSize) + (x / BlockSize)
+		for y := 0; y < BoardSize; y++ {
+			// don't add the bottom right two tiles
+			if x == BoardSize-1 && y >= BoardSize-2 {
+				continue
+			}
+
+			val := (y+offset)%BoardSize + 1
+			board.SetTileValue(x, y, val)
+		}
+	}
+
+	// bad move, need to backtrack 1 and then play two final moves
+	board.SetTileValue(8, 7, 8)
+
+	board.Solve(3)
+
+	allTilesPopulated, solvedMessage := board.allTilesPopulated()
+	if !allTilesPopulated {
 		t.Errorf("Board is not solved with message '%v'", solvedMessage)
 	}
 
