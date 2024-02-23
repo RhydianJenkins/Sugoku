@@ -38,8 +38,8 @@ func (board *Board) Solve(numIterations int) error {
 		err := board.solveOneStep()
 
 		if err != nil {
-			poppedTile, empty := board.history.pop()
-			if empty {
+			poppedTile := board.history.pop()
+			if poppedTile == nil {
 				return fmt.Errorf("Tried to backtrack with empty history. Board is unsolvable")
 			}
 

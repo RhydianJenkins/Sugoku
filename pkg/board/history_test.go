@@ -16,9 +16,9 @@ func TestPushPop(t *testing.T) {
 		t.Errorf("Expected history to have len 2, got %v", len(h.tiles))
 	}
 
-	poppedTile1, empty := h.pop()
+	poppedTile1 := h.pop()
 
-	if empty || h.isEmpty() {
+	if h.isEmpty() {
 		t.Errorf("Expected history to not be empty after first pop")
 	}
 
@@ -26,10 +26,16 @@ func TestPushPop(t *testing.T) {
 		t.Errorf("Expected popped tile to be tile1 got %v", poppedTile1)
 	}
 
-	poppedTile2, empty := h.pop()
+	poppedTile2 := h.pop()
 
-	if !empty || !h.isEmpty() {
+	if !h.isEmpty() {
 		t.Errorf("Expected history to be empty after second pop")
+	}
+
+	nilTile := h.pop()
+
+	if nilTile != nil || !h.isEmpty() {
+		t.Errorf("Expected history to return nil tile and empty bool")
 	}
 
 	if reflect.DeepEqual(tile2, poppedTile2) {
