@@ -31,19 +31,17 @@
                 const table = document.querySelector('#sudoku');
                 const tiles = [];
 
-                table.querySelectorAll('tr').forEach((row, x) => {
-                    const cells = [];
-
-                    row.querySelectorAll('td').forEach((cell, y) => {
-                        cells.push({
-                            x,
-                            y,
-                            val: parseInt(cell.textContent || 0, 10)
-                        });
-                    });
-
-                    tiles.push(cells);
-                });
+                // create a 2D array of tiles
+                for (let i = 0; i < table.rows.length; i++) {
+                    const row = table.rows[i];
+                    const tileRow = [];
+                    for (let j = 0; j < row.cells.length; j++) {
+                        const cell = row.cells[j];
+                        const val = parseInt(cell.textContent || 0, 10)
+                        tileRow.push(val);
+                    }
+                    tiles.push(tileRow);
+                }
 
                 return tiles;
             }
