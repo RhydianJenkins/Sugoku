@@ -66,6 +66,10 @@ func TestFilterEmpty(t *testing.T) {
 
 func TestFindLowestEntropyTiles(t *testing.T) {
 	board := NewEmptyBoard()
+	board.SetTileValue(0, 0, 1)
+	board.SetTileValue(1, 1, 2)
+	board.SetTileValue(4, 4, 2)
+	board.SetTileValue(5, 4, 5)
 	numReturned := len(board.findLowestEntropyTiles())
 	numExpected := 1
 
@@ -161,25 +165,47 @@ func TestGetBlock(t *testing.T) {
 
 func TestSolve(t *testing.T) {
 	board := NewEmptyBoard()
-	solvedBefore := board.isSolved()
+	solvedBefore, _ := board.isSolved()
 
 	if solvedBefore {
 		t.Errorf("Expected board to be unsolved before solving")
 	}
 
 	err := board.Solve(999)
-	isValid, message := board.isValid()
-	solved := board.isSolved()
+	isValid, validMessage := board.isValid()
+	solved, solvedMessage := board.isSolved()
 
 	if err != nil {
 		t.Errorf("Solve returned error with message '%v'", err)
 	}
 
 	if !isValid {
-		t.Errorf("Expected board to be valid, got invalid with message '%v'", message)
+		t.Errorf("Expected board to be valid, got invalid with message '%v'", validMessage)
 	}
 
 	if !solved {
-		t.Errorf("board.isSolved() returned false")
+		t.Errorf("board.isSolved() returned false with message %v", solvedMessage)
+	}
+}
+
+func TestFullySolved(t *testing.T) {
+	board := NewEmptyBoard()
+
+	for x := 0; x < BoardSize; x++ {
+		offset := ((x * BlockSize) % BoardSize) + (x / BlockSize)
+		for y := 0; y < BoardSize; y++ {
+			val := (y+offset)%BoardSize + 1
+			board.SetTileValue(x, y, val)
+		}
+	}
+
+	solved, solvedMessage := board.isSolved()
+	if !solved {
+		t.Errorf("Board is not solved with message '%v'", solvedMessage)
+	}
+
+	isValid, message := board.isValid()
+	if !isValid {
+		t.Errorf("Expected board to be valid but got invalid with message '%v'", message)
 	}
 }

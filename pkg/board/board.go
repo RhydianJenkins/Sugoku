@@ -59,7 +59,8 @@ func (board *Board) Solve(numIterations int) error {
 			poppedTile.BadValues = append(poppedTile.BadValues, badValue)
 		}
 
-		if board.isSolved() {
+		solved, _ := board.isSolved()
+		if solved {
 			return nil
 		}
 	}
@@ -67,17 +68,17 @@ func (board *Board) Solve(numIterations int) error {
 	return nil
 }
 
-func (board Board) isSolved() bool {
+func (board Board) isSolved() (solved bool, message string) {
 	for x := 0; x < BoardSize; x++ {
 		for y := 0; y < BoardSize; y++ {
 			tile := board.GetTile(x, y)
 			if tile.isEmpty() {
-				return false
+				return false, fmt.Sprintf("Tile at x:%d, y:%d is empty", x, y)
 			}
 		}
 	}
 
-	return true
+	return true, "Board is solved"
 }
 
 func (board Board) isValid() (isValid bool, message string) {
@@ -93,7 +94,7 @@ func (board Board) isValid() (isValid bool, message string) {
 			}
 
 			if seenColValues[val] {
-				return false, fmt.Sprintf("Val %d is not unique in col", val)
+				return false, fmt.Sprintf("Val %d (x:%d, y:%d) is not unique in col", val, x, y)
 			}
 
 			seenColValues[val] = true
@@ -112,10 +113,36 @@ func (board Board) isValid() (isValid bool, message string) {
 			}
 
 			if seenRowValues[val] {
-				return false, fmt.Sprintf("Val %d is not unique in row %d", val, x)
+				return false, fmt.Sprintf("Val %d (x:%d, y:%d) is not unique in row", val, x, y)
 			}
 
 			seenRowValues[val] = true
+		}
+	}
+
+	// check blocks are unique
+	seenBlockValues := make(map[int]bool)
+	numBlocks := BoardSize / BlockSize
+	for i := 0; i < numBlocks; i++ {
+		for j := 0; j < numBlocks; j++ {
+			block := board.GetBlock(i, j)
+			for _, tile := range block {
+				if tile.isEmpty() {
+					continue
+				}
+
+				if tile.Value > BoardSize {
+					return false, fmt.Sprintf("Val %d (x:%d, y:%d) is greater than board size", tile.Value, tile.X, tile.Y)
+				}
+
+				if tile.Value <= 0 {
+					return false, fmt.Sprintf("Val %d (x:%d, y:%d) must be a positive integer", tile.Value, tile.X, tile.Y)
+				}
+
+				if seenBlockValues[tile.Value] {
+					return false, fmt.Sprintf("Val %d (x:%d, y:%d) is not unique in block", tile.Value, tile.X, tile.Y)
+				}
+			}
 		}
 	}
 
