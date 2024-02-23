@@ -21,18 +21,26 @@ func NewEmptyBoard() Board {
 
 func NewBoard(tileValues [BoardSize][BoardSize]int) Board {
 	tiles := [BoardSize][BoardSize]Tile{}
+	numPrePopulatedTiles := 0
+	// Being with an empty history, assuming the given board is solvable
+	history := HistoryStack{}
 
 	for x := 0; x < BoardSize; x++ {
 		for y := 0; y < BoardSize; y++ {
 			newTile := NewTile(x, y)
 			newTile.Value = tileValues[x][y]
 			tiles[x][y] = newTile
+
+			if newTile.Value != Empty {
+				numPrePopulatedTiles++
+			}
 		}
 	}
 
 	return Board{
-		tiles:                tiles,
-		numPrePopulatedTiles: len(tileValues),
+		tiles,
+		numPrePopulatedTiles,
+		history,
 	}
 }
 
