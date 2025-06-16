@@ -26,8 +26,8 @@ func NewBoard(tileValues [BoardSize][BoardSize]int) Board {
 	// Begin with an empty history, assuming the given board is solvable
 	history := HistoryStack{}
 
-	for x := 0; x < BoardSize; x++ {
-		for y := 0; y < BoardSize; y++ {
+	for x := range BoardSize {
+		for y := range BoardSize {
 			newTile := NewTile(x, y)
 			newTile.Value = tileValues[x][y]
 			tiles[x][y] = newTile
@@ -46,7 +46,7 @@ func NewBoard(tileValues [BoardSize][BoardSize]int) Board {
 }
 
 func (board *Board) Solve(numIterations int) error {
-	for i := 0; i < numIterations; i++ {
+	for range numIterations {
 		allTilesPopulated, _ := board.allTilesPopulated()
 		isValid, _ := board.isValid()
 		if allTilesPopulated && isValid {
@@ -71,8 +71,8 @@ func (board *Board) Solve(numIterations int) error {
 }
 
 func (board Board) allTilesPopulated() (solved bool, message string) {
-	for x := 0; x < BoardSize; x++ {
-		for y := 0; y < BoardSize; y++ {
+	for x := range BoardSize {
+		for y := range BoardSize {
 			tile := board.GetTile(x, y)
 			if tile.isEmpty() {
 				return false, fmt.Sprintf("Tile at x:%d, y:%d is empty", x, y)
@@ -85,11 +85,11 @@ func (board Board) allTilesPopulated() (solved bool, message string) {
 
 func (board Board) isValid() (isValid bool, message string) {
 	// check columns are unique
-	for x := 0; x < BoardSize; x++ {
+	for x := range BoardSize {
 		col := board.GetCol(x)
 		seenColValues := make(map[int]bool)
 
-		for y := 0; y < BoardSize; y++ {
+		for y := range BoardSize {
 			val := col[y].Value
 			if val == Empty {
 				continue
@@ -104,11 +104,11 @@ func (board Board) isValid() (isValid bool, message string) {
 	}
 
 	// check rows are unique
-	for y := 0; y < BoardSize; y++ {
+	for y := range BoardSize {
 		row := board.GetRow(y)
 		seenRowValues := make(map[int]bool)
 
-		for x := 0; x < BoardSize; x++ {
+		for x := range BoardSize {
 			val := row[x].Value
 			if val == Empty {
 				continue
@@ -125,8 +125,8 @@ func (board Board) isValid() (isValid bool, message string) {
 	// check blocks are unique
 	seenBlockValues := make(map[int]bool)
 	numBlocks := BoardSize / BlockSize
-	for i := 0; i < numBlocks; i++ {
-		for j := 0; j < numBlocks; j++ {
+	for i := range numBlocks {
+		for j := range numBlocks {
 			block := board.GetBlock(i, j)
 			for _, tile := range block {
 				if tile.isEmpty() {
@@ -155,8 +155,8 @@ func (board *Board) findLowestEntropyTiles() []*Tile {
 	lowestEntropy := BoardSize
 	lowestEntropyTiles := []*Tile{}
 
-	for x := 0; x < BoardSize; x++ {
-		for y := 0; y < BoardSize; y++ {
+	for x := range BoardSize {
+		for y := range BoardSize {
 			tile := board.GetTile(x, y)
 			tile.possibleValues = calculatePossibleValues(*board, x, y)
 			tileEntropy := tile.GetEntropy()
@@ -167,8 +167,8 @@ func (board *Board) findLowestEntropyTiles() []*Tile {
 		}
 	}
 
-	for x := 0; x < BoardSize; x++ {
-		for y := 0; y < BoardSize; y++ {
+	for x := range BoardSize {
+		for y := range BoardSize {
 			tile := board.GetTile(x, y)
 
 			if tile.GetEntropy() == lowestEntropy {
@@ -201,8 +201,8 @@ func (board Board) String() string {
 	var sb strings.Builder
 	tiles := board.GetTiles()
 
-	for x := 0; x < BoardSize; x++ {
-		for y := 0; y < BoardSize; y++ {
+	for x := range BoardSize {
+		for y := range BoardSize {
 			sb.WriteString(fmt.Sprintf("[%d]", tiles[x][y].Value))
 		}
 
@@ -215,8 +215,8 @@ func (board Board) String() string {
 func (board *Board) GetBlock(x, y int) []*Tile {
 	block := []*Tile{}
 
-	for i := 0; i < BlockSize; i++ {
-		for j := 0; j < BlockSize; j++ {
+	for i := range BlockSize {
+		for j := range BlockSize {
 			block = append(block, board.GetTile(x*BlockSize+i, y*BlockSize+j))
 		}
 	}
@@ -244,7 +244,7 @@ func (board Board) GetRow(x int) [BoardSize]Tile {
 func (board Board) GetCol(y int) [BoardSize]Tile {
 	col := [BoardSize]Tile{}
 
-	for i := 0; i < BoardSize; i++ {
+	for i := range BoardSize {
 		col[i] = *board.GetTile(i, y)
 	}
 
