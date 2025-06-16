@@ -8,9 +8,11 @@ Sudoku solver webapp
 Run and done.
 
 ```sh
-make run
+docker build -t sugoku .
+docker run -p 8080:8080 sugoku
 
-# in a separate terminal
+# ... or just `make run` if you want to run on host
+# then in a separate terminal
 curl localhost:8080
 ```
 
