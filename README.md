@@ -8,12 +8,17 @@ Sudoku solver webapp
 Run and done.
 
 ```sh
-docker build -t sugoku .
-docker run -p 8080:8080 sugoku
+# With docker...
+$ docker build -t sugoku .
+$ docker run -p 8080:8080 sugoku
 
-# ... or just `make run` if you want to run on host
-# then in a separate terminal
-curl localhost:8080
+# With nix...
+$ nix run
+
+# Or just on host...
+$ make run
+
+# ...then just go to localhost:8080 in your browser
 ```
 
 ## TODO
